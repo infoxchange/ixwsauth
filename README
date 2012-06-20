@@ -1,0 +1,18 @@
+========
+IXWSAuth
+========
+
+Authentication libraries for Django applications using Infoxchange Web
+Services - specifically designed for communication with WSX application.
+
+
+Dependencies
+------------
+
+* Django: Might work on older versions but was developed for 1.3.0.
+* IXDjango: Which provides utility functions used here
+* pep8 and pylint: Not required for functionality but we like QC before
+committing any code changes so these tools need to be available. Note that
+if you'd like to contribute, any code you write must give a clean output with
+pep8 and score 10/10 with pylint using the configuration file
+conf/pylint.conf in the package
