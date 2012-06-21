@@ -35,7 +35,7 @@ class WebServicesConsumerTests(TestCase):
         otherwise it should place the value in the right place
         """
         self.settings_key_patcher = patch.object(settings,
-                                'IXWS_CONSUMER_KEY', None)
+                                'IXWS_CONSUMER_KEY', None, create=True,)
         self.settings_key_patcher.start()
         try:
             with self.assertRaises(ImproperlyConfigured):
@@ -44,12 +44,18 @@ class WebServicesConsumerTests(TestCase):
             self.settings_key_patcher.stop()
 
         self.settings_key_patcher = patch.object(settings,
-                                'IXWS_CONSUMER_KEY', self.cons_key)
+                                        'IXWS_CONSUMER_KEY', self.cons_key,
+                                        create=True)
+        self.settings_secret_patcher = patch.object(settings,
+                                    'IXWS_CONSUMER_SECRET', self.cons_secret,
+                                    create=True)
         self.settings_key_patcher.start()
+        self.settings_secret_patcher.start()
         try:
             consumer = WebServicesConsumer()
             self.assertEqual(consumer.key, self.cons_key)
         finally:
+            self.settings_secret_patcher.stop()
             self.settings_key_patcher.stop()
 
     def test_consumer_secret(self):
@@ -58,11 +64,13 @@ class WebServicesConsumerTests(TestCase):
         otherwise it should place the value in the right place
         """
         self.settings_key_patcher = patch.object(settings,
-                                'IXWS_CONSUMER_KEY', self.cons_key)
+                                        'IXWS_CONSUMER_KEY', self.cons_key,
+                                        create=True)
         self.settings_key_patcher.start()
         try:
             self.settings_secret_patcher = patch.object(settings,
-                                    'IXWS_CONSUMER_SECRET', None)
+                                        'IXWS_CONSUMER_SECRET', None,
+                                        create=True)
             self.settings_secret_patcher.start()
             try:
                 with self.assertRaises(ImproperlyConfigured):
@@ -71,7 +79,8 @@ class WebServicesConsumerTests(TestCase):
                 self.settings_secret_patcher.stop()
 
             self.settings_secret_patcher = patch.object(settings,
-                                   'IXWS_CONSUMER_SECRET', self.cons_secret)
+                                    'IXWS_CONSUMER_SECRET', self.cons_secret,
+                                    create=True)
             self.settings_secret_patcher.start()
             try:
                 consumer = WebServicesConsumer()
