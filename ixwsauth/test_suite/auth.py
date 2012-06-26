@@ -145,14 +145,14 @@ class AuthManagerTests(TestCase):
         #
         # mock time
         #
-        self.time_patcher = patch('wsx_core.auth.time', autospec=True)
+        self.time_patcher = patch('ixwsauth.auth.time', autospec=True)
         self.addCleanup(self.time_patcher.stop)
         self.time_mock_class = self.time_patcher.start()
         self.time_mock_class.return_value = '1334200159'
         #
         # mock utils.random_string
         #
-        self.util_patcher = patch('wsx_core.auth.random_string',
+        self.util_patcher = patch('ixwsauth.auth.random_string',
                                   autospec=True)
         self.addCleanup(self.util_patcher.stop)
         self.util_mock_class = self.util_patcher.start()
