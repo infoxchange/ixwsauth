@@ -11,6 +11,7 @@ import binascii
 from time import time
 from copy import deepcopy
 from urlparse import urlparse
+from urllib import quote
 
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
@@ -99,7 +100,7 @@ class AuthManager(object):
         #
         hashed = hmac.new("%s&" % secret.encode('ascii'), raw, hashlib.sha1)
         signature = binascii.b2a_base64(hashed.digest())[:-1]
-        return signature
+        return quote(signature)
 
     def oauth_signature_from_payload(self, payload):
         """

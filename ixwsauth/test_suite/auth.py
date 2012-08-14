@@ -161,7 +161,7 @@ class AuthManagerTests(TestCase):
         # since both nonce and timestamp are fixed with mocks, using
         # the test_params should always result in the same signature
         #
-        self.test_sig = 'stimk30kABrFN9rHHNltwpESOes='
+        self.test_sig = 'stimk30kABrFN9rHHNltwpESOes%3D'
 
         self.test_payload_oauth_params_with_sig = \
                                deepcopy(self.test_payload_oauth_params)
@@ -208,7 +208,7 @@ class AuthManagerTests(TestCase):
         signature = self.instance.generate_oauth_signature(
                                               self.consumer_mock_instance,
                                               self.test_payload_oauth_params)
-        self.assertEqual(signature, 'VN8ggIJ158DzlcAkixcdGkkMNvo=')
+        self.assertEqual(signature, 'VN8ggIJ158DzlcAkixcdGkkMNvo%3D')
 
     def test_oauth_signature_from_payload(self):
         """
