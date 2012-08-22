@@ -69,7 +69,7 @@ class AuthManager(object):
         """
         percentage escape a string as per oAuth standards
         """
-        return urllib.quote(string, safe='~')
+        return quote(string, safe='~')
 
     def generate_oauth_signature(self, consumer, payload):
         """
@@ -100,7 +100,7 @@ class AuthManager(object):
         #
         hashed = hmac.new("%s&" % secret.encode('ascii'), raw, hashlib.sha1)
         signature = binascii.b2a_base64(hashed.digest())[:-1]
-        return quote(signature)
+        return self.escape(signature)
 
     def oauth_signature_from_payload(self, payload):
         """
