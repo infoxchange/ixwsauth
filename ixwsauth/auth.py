@@ -4,7 +4,6 @@ Auth Helpers
 .. moduleauthor:: Infoxchange Development Team <development@infoxchange.net.au>
 
 """
-import urllib
 import hashlib
 import hmac
 import binascii
