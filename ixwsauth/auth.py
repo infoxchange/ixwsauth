@@ -167,13 +167,15 @@ class AuthManager(object):
         except KeyError:
             pass
         key_values = params.items()
-        # sort lexicographically, first after key, then after value
+        # sort keys first
         key_values.sort()
         # combine key value pairs in string and escape
         sorted_params = []
         for key, value in key_values:
             if not isinstance(value, list):
                 value = [value]
+            # sort values for the same key
+            value.sort()
             for value_item in value:
                 sorted_params.append(
                     "%s=%s" % (self.escape(str(key)),

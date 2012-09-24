@@ -104,7 +104,13 @@ class AuthManagerTests(TestCase):
             'a': 'with whitespace',
             'b': '%with * weird @ stuff'
         }
-        self.test_params_array_vals_for_b = ['an', 'array', 'of', 'values']
+        self.test_params_array_vals_for_b = [
+            'an',
+            'unsorted',
+            'array',
+            'of',
+            'values'
+        ]
         self.test_oauth_params = {
             'oauth_consumer_key': '99d27293b4bbd42d2937219aa5497ea51dee3bf9',
             'oauth_nonce': '2ZLE6ApP5B',
@@ -208,7 +214,7 @@ class AuthManagerTests(TestCase):
         signature = self.instance.generate_oauth_signature(
                                               self.consumer_mock_instance,
                                               self.test_payload_oauth_params)
-        self.assertEqual(signature, 'VN8ggIJ158DzlcAkixcdGkkMNvo%3D')
+        self.assertEqual(signature, '4jLuUXeaQF9ytkFgkiPMoo%2FsO1g%3D')
 
     def test_oauth_signature_from_payload(self):
         """
@@ -277,4 +283,4 @@ class AuthManagerTests(TestCase):
         self.test_params['b'] = self.test_params_array_vals_for_b
         self.assertEqual(
             self.instance.oauth_n_params_str(self.test_params),
-            'a=with%20whitespace&b=an&b=array&b=of&b=values')
+            'a=with%20whitespace&b=an&b=array&b=of&b=unsorted&b=values')
