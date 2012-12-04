@@ -76,7 +76,7 @@ class AuthManager(object):
         """
         secret = consumer.secret()
         local_params = {}
-        if 'params' in payload:
+        if 'params' in payload and payload['params'] is not None:
             local_params.update(payload['params'])
         if 'headers' in payload and 'Authorization' in payload['headers']:
             for auth_param in payload['headers']['Authorization'].keys():
@@ -86,7 +86,7 @@ class AuthManager(object):
 
         if 'oauth_signature' in local_params:
             del local_params['oauth_signature']
-
+        
         raw_str_comps = (
             self.escape(payload['method'].upper()),
             self.escape(self.oauth_n_url_str(payload['url'])),
