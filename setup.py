@@ -6,7 +6,7 @@ from setuptools import find_packages
 
 setup(
     name='IXWSAuth',
-    version='0.1.0',
+    version='0.1.1',
     author='Infoxchanhe Australia dev team',
     author_email='devs@infoxchange.net.au',
     packages=find_packages(),
@@ -18,6 +18,6 @@ setup(
         "Django >= 1.3.0",
         "pep8 >= 1.0.1",
         "pylint >= 0.25.1",
-        "IXDjango >= 0.1.0"
+        "IXDjango >= 0.1.1"
     ],
 )
