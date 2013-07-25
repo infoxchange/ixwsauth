@@ -31,8 +31,23 @@ class Consumer(object):
     """
 
     def __init__(self, key=None, secret=None, obj=None):
-        self.key = key
-        self.secret = secret
+        self._key = key
+        self._secret = secret
+        self._object = obj
+
+    def key(self):
+        """
+        Return the consumer key
+        """
+
+        return self._key
+
+    def secret(self):
+        """
+        Return the consumer secret
+        """
+
+        return self._secret
 
 
 class ConsumerStore(object):
