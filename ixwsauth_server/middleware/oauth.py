@@ -59,6 +59,22 @@ class ConsumerStore(object):
     consumer_class_key = 'key'
     consumer_class_secret = 'secret'
 
+    @staticmethod
+    def get_consumer_store():
+        """
+        Return the configured consumer store (not a singleton)
+        """
+
+        try:
+            consumer_store_class = \
+                import_by_path(settings.CONSUMER_STORE_CLASS)
+        except AttributeError:
+            raise ImproperlyConfigured(
+                "Using CheckSignatureMiddleware requires "
+                "settings.CONSUMER_STORE_CLASS")
+
+        return consumer_store_class()
+
     @property
     def consumer_class(self):
         """
@@ -95,15 +111,7 @@ class CheckSignatureMiddleware(object):
     """
 
     def __init__(self):
-        try:
-            consumer_store_class = \
-                import_by_path(settings.CONSUMER_STORE_CLASS)
-        except AttributeError:
-            raise ImproperlyConfigured(
-                "Using CheckSignatureMiddleware requires "
-                "settings.CONSUMER_STORE_CLASS")
-
-        self.consumer_store = consumer_store_class()
+        self.consumer_store = ConsumerStore.get_consumer_store()
 
     @staticmethod
     def get_oauth_headers(request):
