@@ -19,8 +19,15 @@ class ApplicationClient(Client):
 
     consumer_store = ConsumerStore.get_consumer_store()
 
-    def __init__(self, key, **defaults):
-        self.consumer = self.consumer_store.get_consumer(key)
+    def __init__(self, key, secret=None, **defaults):
+        self._key = key
+
+        if secret:
+            self._secret = secret
+        else:
+            consumer = self.consumer_store.get_consumer(key)
+            self._secret = consumer.secret()
+
         super(ApplicationClient, self).__init__(**defaults)
 
     @property
@@ -29,14 +36,14 @@ class ApplicationClient(Client):
         The API key
         """
 
-        return self.consumer.key()
+        return self._key
 
     def secret(self):
         """
         The secret associated with the API key
         """
 
-        return self.consumer.secret()
+        return self._secret
 
     def _base_environ(self, **request):
         """
@@ -63,7 +70,7 @@ class ApplicationClient(Client):
         return environ
 
 
-@before.each_scenario
+@before.each_scenario  # pylint:disable=no-member
 def set_default_client(scenario):
     """
     Set a default client that does not have authentication
@@ -79,3 +86,12 @@ def authenticate_application(step_, key):
     """
 
     world.client = ApplicationClient(key=key)
+
+
+@step(r'I authenticate to the API with key "([^"]*)" and secret "([^"]*)"')
+def authenticate_with_secret(step_, key, secret):
+    """
+    Authenticate to the application with the given key and secret
+    """
+
+    world.client = ApplicationClient(key=key, secret=secret)
