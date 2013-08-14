@@ -138,6 +138,9 @@ class AuthManager(object):
             'oauth_timestamp': int(time()),
             'oauth_signature_method': OAUTH_SIG_METHOD,
             'oauth_version': OAUTH_VERSION,
+        })
+        # Add signature when all the other fields are already present
+        payload['headers']['Authorization'].update({
             'oauth_signature': self.generate_oauth_signature(consumer,
                                                              payload),
         })
