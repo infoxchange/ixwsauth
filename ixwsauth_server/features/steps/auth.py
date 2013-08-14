@@ -2,6 +2,8 @@
 Steps for testing authentication
 """
 
+from urlparse import parse_qs
+
 from django.test.client import Client
 
 from lettuce import before, step, world
@@ -55,10 +57,14 @@ class ApplicationClient(Client):
         auth_man = auth.AuthManager()
 
         method = request['REQUEST_METHOD']
+        if method == 'GET':
+            params = parse_qs(request['QUERY_STRING'])
+        else:
+            params = {}
         payload = {
             'method': method,
             'url': 'http://testserver' + request['PATH_INFO'],
-            'params': {},
+            'params': params,
         }
         signed_payload = auth_man.oauth_signed_payload(self, payload)
 
