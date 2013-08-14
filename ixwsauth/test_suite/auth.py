@@ -35,7 +35,9 @@ class WebServicesConsumerTests(TestCase):
         otherwise it should place the value in the right place
         """
         self.settings_key_patcher = patch.object(settings,
-                                'IXWS_CONSUMER_KEY', None, create=True,)
+                                                 'IXWS_CONSUMER_KEY',
+                                                 None,
+                                                 create=True)
         self.settings_key_patcher.start()
         try:
             with self.assertRaises(ImproperlyConfigured):
@@ -44,11 +46,13 @@ class WebServicesConsumerTests(TestCase):
             self.settings_key_patcher.stop()
 
         self.settings_key_patcher = patch.object(settings,
-                                        'IXWS_CONSUMER_KEY', self.cons_key,
-                                        create=True)
+                                                 'IXWS_CONSUMER_KEY',
+                                                 self.cons_key,
+                                                 create=True)
         self.settings_secret_patcher = patch.object(settings,
-                                    'IXWS_CONSUMER_SECRET', self.cons_secret,
-                                    create=True)
+                                                    'IXWS_CONSUMER_SECRET',
+                                                    self.cons_secret,
+                                                    create=True)
         self.settings_key_patcher.start()
         self.settings_secret_patcher.start()
         try:
@@ -64,13 +68,15 @@ class WebServicesConsumerTests(TestCase):
         otherwise it should place the value in the right place
         """
         self.settings_key_patcher = patch.object(settings,
-                                        'IXWS_CONSUMER_KEY', self.cons_key,
-                                        create=True)
+                                                 'IXWS_CONSUMER_KEY',
+                                                 self.cons_key,
+                                                 create=True)
         self.settings_key_patcher.start()
         try:
             self.settings_secret_patcher = patch.object(settings,
-                                        'IXWS_CONSUMER_SECRET', None,
-                                        create=True)
+                                                        'IXWS_CONSUMER_SECRET',
+                                                        None,
+                                                        create=True)
             self.settings_secret_patcher.start()
             try:
                 with self.assertRaises(ImproperlyConfigured):
@@ -79,8 +85,9 @@ class WebServicesConsumerTests(TestCase):
                 self.settings_secret_patcher.stop()
 
             self.settings_secret_patcher = patch.object(settings,
-                                    'IXWS_CONSUMER_SECRET', self.cons_secret,
-                                    create=True)
+                                                        'IXWS_CONSUMER_SECRET',
+                                                        self.cons_secret,
+                                                        create=True)
             self.settings_secret_patcher.start()
             try:
                 consumer = WebServicesConsumer()
@@ -129,11 +136,11 @@ class AuthManagerTests(TestCase):
             'url': self.test_url
         }
         self.test_payload_oauth_params = deepcopy(self.test_payload)
-        self.test_payload_oauth_params['params'] = \
-                                    self.test_params_with_oauth
+        self.test_payload_oauth_params['params'] = self.test_params_with_oauth
         self.test_payload_oauth_headers = deepcopy(self.test_payload)
         self.test_payload_oauth_headers['headers'] = {
-                                'Authorization': self.test_oauth_params}
+            'Authorization': self.test_oauth_params
+        }
 
         #
         # mock consumer
@@ -169,18 +176,14 @@ class AuthManagerTests(TestCase):
         #
         self.test_sig = 'stimk30kABrFN9rHHNltwpESOes%3D'
 
-        self.test_payload_oauth_params_with_sig = \
-                               deepcopy(self.test_payload_oauth_params)
-        (self.test_payload_oauth_params_with_sig['params']
-                                                ['oauth_signature']) = \
-                                                            self.test_sig
+        params_with_sig = deepcopy(self.test_payload_oauth_params)
+        params_with_sig['params']['oauth_signature'] = self.test_sig
+        self.test_payload_oauth_params_with_sig = params_with_sig
 
-        self.test_payload_oauth_headers_with_sig = \
-                                   deepcopy(self.test_payload_oauth_headers)
-        (self.test_payload_oauth_headers_with_sig['headers']
-                                                 ['Authorization']
-                                                 ['oauth_signature']) = \
-                                                            self.test_sig
+        headers_with_sig = deepcopy(self.test_payload_oauth_headers)
+        headers_with_sig['headers']['Authorization']['oauth_signature'] = \
+            self.test_sig
+        self.test_payload_oauth_headers_with_sig = headers_with_sig
 
     def test_generate_oauth_signature(self):
         """
@@ -191,8 +194,8 @@ class AuthManagerTests(TestCase):
         # We can accept oauth stuff in the parameters
         #
         signature = self.instance.generate_oauth_signature(
-                                              self.consumer_mock_instance,
-                                              self.test_payload_oauth_params)
+            self.consumer_mock_instance,
+            self.test_payload_oauth_params)
         self.assertEqual(signature, self.test_sig)
 
         #
@@ -200,8 +203,8 @@ class AuthManagerTests(TestCase):
         # headers
         #
         signature = self.instance.generate_oauth_signature(
-                                              self.consumer_mock_instance,
-                                              self.test_payload_oauth_headers)
+            self.consumer_mock_instance,
+            self.test_payload_oauth_headers)
         self.assertEqual(signature, self.test_sig)
 
         #
@@ -210,10 +213,10 @@ class AuthManagerTests(TestCase):
         # break anything
         #
         self.test_payload_oauth_params['params']['b'] = \
-                                           self.test_params_array_vals_for_b
+            self.test_params_array_vals_for_b
         signature = self.instance.generate_oauth_signature(
-                                              self.consumer_mock_instance,
-                                              self.test_payload_oauth_params)
+            self.consumer_mock_instance,
+            self.test_payload_oauth_params)
         self.assertEqual(signature, '4jLuUXeaQF9ytkFgkiPMoo%2FsO1g%3D')
 
     def test_oauth_signature_from_payload(self):
@@ -225,14 +228,14 @@ class AuthManagerTests(TestCase):
         #
         self.assertEqual(
             self.instance.oauth_signature_from_payload(
-                    self.test_payload_oauth_params_with_sig),
+                self.test_payload_oauth_params_with_sig),
             self.test_sig)
         #
         # from headers
         #
         self.assertEqual(
             self.instance.oauth_signature_from_payload(
-                    self.test_payload_oauth_headers_with_sig),
+                self.test_payload_oauth_headers_with_sig),
             self.test_sig)
 
     def test_consumer_key_from_payload(self):
@@ -244,14 +247,14 @@ class AuthManagerTests(TestCase):
         #
         self.assertEqual(
             self.instance.consumer_key_from_payload(
-                    self.test_payload_oauth_params),
+                self.test_payload_oauth_params),
             self.test_params_with_oauth['oauth_consumer_key'])
         #
         # from headers
         #
         self.assertEqual(
             self.instance.consumer_key_from_payload(
-                    self.test_payload_oauth_headers),
+                self.test_payload_oauth_headers),
             self.test_params_with_oauth['oauth_consumer_key'])
 
     def test_oauth_signed_payload(self):
@@ -260,8 +263,8 @@ class AuthManagerTests(TestCase):
         """
         self.assertItemsEqual(
             self.instance.oauth_signed_payload(
-                        self.consumer_mock_instance,
-                        self.test_payload),
+                self.consumer_mock_instance,
+                self.test_payload),
             self.test_payload_oauth_headers_with_sig)
 
     def test_oauth_n_url_str(self):

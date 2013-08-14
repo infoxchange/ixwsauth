@@ -39,7 +39,7 @@ class WebServicesConsumer(object):
         """
         if (not settings.IXWS_CONSUMER_KEY
            or not settings.IXWS_CONSUMER_SECRET):
-            raise ImproperlyConfigured("Settings file does not contain " + \
+            raise ImproperlyConfigured("Settings file does not contain " +
                                        "authentication information.")
         self.key = settings.IXWS_CONSUMER_KEY
 
@@ -86,7 +86,7 @@ class AuthManager(object):
 
         if 'oauth_signature' in local_params:
             del local_params['oauth_signature']
-        
+
         raw_str_comps = (
             self.escape(payload['method'].upper()),
             self.escape(self.oauth_n_url_str(payload['url'])),
@@ -132,15 +132,15 @@ class AuthManager(object):
             payload['headers'] = {}
         if 'Authorization' not in payload['headers']:
             payload['headers']['Authorization'] = {}
-        payload['headers']['Authorization']['oauth_consumer_key'] = \
-                                                            consumer.key
-        payload['headers']['Authorization']['oauth_nonce'] = random_string()
-        payload['headers']['Authorization']['oauth_timestamp'] = int(time())
-        payload['headers']['Authorization']['oauth_signature_method'] = \
-                                                            OAUTH_SIG_METHOD
-        payload['headers']['Authorization']['oauth_version'] = OAUTH_VERSION
-        payload['headers']['Authorization']['oauth_signature'] = \
-                            self.generate_oauth_signature(consumer, payload)
+        payload['headers']['Authorization'].update({
+            'oauth_consumer_key': consumer.key,
+            'oauth_nonce': random_string(),
+            'oauth_timestamp': int(time()),
+            'oauth_signature_method': OAUTH_SIG_METHOD,
+            'oauth_version': OAUTH_VERSION,
+            'oauth_signature': self.generate_oauth_signature(consumer,
+                                                             payload),
+        })
 
         return payload
 
