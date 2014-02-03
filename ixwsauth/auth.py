@@ -201,16 +201,8 @@ def convert_to_str(data):
     """
     Converts any unicode value inside a list of params to str
     """
-    return list((str_to_unicode(key),
-                 str_to_unicode(value)) for key, value in data)
-
-
-def str_to_unicode(value):
-    """
-    Encode an unicode value to its str equivalent
-    """
-    if isinstance(value, list):
-        value = map(str_to_unicode, value)
-    if isinstance(value, unicode):
-        value = value.encode('utf-8')
-    return value
+    if isinstance(data, (list, tuple)):
+        data = map(convert_to_str, data)
+    if isinstance(data, unicode):
+        data = data.encode('utf-8')
+    return data
