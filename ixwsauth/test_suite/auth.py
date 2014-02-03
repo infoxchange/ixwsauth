@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Tests for WSX Auth Components
 """
@@ -287,3 +288,12 @@ class AuthManagerTests(TestCase):
         self.assertEqual(
             self.instance.oauth_n_params_str(self.test_params),
             'a=with%20whitespace&b=an&b=array&b=of&b=unsorted&b=values')
+
+        unicode_params = {
+            'a_♍': u'♈_♜',
+            u'ж_學': 'ἀ_னி'
+        }
+        self.assertEqual(
+            self.instance.oauth_n_params_str(unicode_params),
+            'a_%E2%99%8D=%E2%99%88_%E2%99%9C&' +
+            '%D0%B6_%E5%AD%B8=%E1%BC%80_%E0%AE%A9%E0%AE%BF')
