@@ -168,7 +168,7 @@ class AuthManager(object):
             del params['oauth_signature']
         except KeyError:
             pass
-        key_values = params.items()
+        key_values = convert_to_str(params.items())
         # sort keys first
         key_values.sort()
         # combine key value pairs in string and escape
@@ -195,3 +195,14 @@ class AuthManager(object):
             if auth_param in clean_params:
                 del(clean_params[auth_param])
         return clean_params
+
+
+def convert_to_str(data):
+    """
+    Converts any unicode value inside a list of params to str
+    """
+    if isinstance(data, (list, tuple)):
+        data = map(convert_to_str, data)
+    if isinstance(data, unicode):
+        data = data.encode('utf-8')
+    return data
