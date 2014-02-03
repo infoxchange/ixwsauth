@@ -291,9 +291,11 @@ class AuthManagerTests(TestCase):
 
         unicode_params = {
             'a_♍': u'♈_♜',
-            u'ж_學': 'ἀ_னி'
+            u'ж_學': 'ἀ_னி',
+            u'ꩺ': [u'b', 'ꩥ', u'꤃'],
         }
         self.assertEqual(
             self.instance.oauth_n_params_str(unicode_params),
             'a_%E2%99%8D=%E2%99%88_%E2%99%9C&' +
-            '%D0%B6_%E5%AD%B8=%E1%BC%80_%E0%AE%A9%E0%AE%BF')
+            '%D0%B6_%E5%AD%B8=%E1%BC%80_%E0%AE%A9%E0%AE%BF&' +
+            '%EA%A9%BA=b&%EA%A9%BA=%EA%A4%83&%EA%A9%BA=%EA%A9%A5')

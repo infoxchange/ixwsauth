@@ -199,26 +199,25 @@ class AuthManager(object):
 
 def convert_to_str(data):
     """
-    Convert unicode values to str
+    Converts any unicode value inside a list of params to str
     """
     new_data = []
     for item in data:
         key, value = item
 
-        if isinstance(key, unicode):
-            key = key.encode('utf-8')
+        if isinstance(value, list):
+            value = map(str_to_unicode, value)
+        else:
+            value = str_to_unicode(value)
 
-        if isinstance(value, unicode):
-            value = value.encode('utf-8')
-        elif isinstance(value, list):
-            new_value = []
-            for value_item in value:
-                if isinstance(value_item, unicode):
-                    new_value.append(value_item.encode('utf-8'))
-                else:
-                    new_value.append(value_item)
-            value = new_value
-
-        new_data.append((key, value))
-
+        new_data.append((str_to_unicode(key), value))
     return new_data
+
+
+def str_to_unicode(value):
+    """
+    Encode an unicode value to its str equivalent
+    """
+    if isinstance(value, unicode):
+        value = value.encode('utf-8')
+    return value
