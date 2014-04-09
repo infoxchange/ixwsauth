@@ -6,6 +6,7 @@ import base64
 
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
+from django.core.cache import cache
 from django.http import HttpResponseForbidden
 from django.utils.crypto import constant_time_compare
 from django.utils.importlib import import_module
@@ -97,14 +98,30 @@ class ConsumerStore(object):
         """
         Retrieve the consumer from the store.
         """
+        cache_key = 'consumer-%s' % key
 
         try:
+            consumer = cache.get(cache_key)
+
+            if isinstance(consumer, self.consumer_class.DoesNotExist):
+                return None
+            elif consumer is not None:
+                return consumer
+
             obj = self.consumer_class.objects.get(
                 **{self.consumer_class_key: key})
-            return Consumer(key=key,
-                            secret=getattr(obj, self.consumer_class_secret),
-                            obj=obj)
-        except self.consumer_class.DoesNotExist:
+
+            consumer = Consumer(
+                key=key,
+                secret=getattr(obj, self.consumer_class_secret),
+                obj=obj)
+
+            cache.set(cache_key, consumer)
+            return consumer
+
+        except self.consumer_class.DoesNotExist as e:
+
+            cache.set(cache_key, e)
             return None
 
 
