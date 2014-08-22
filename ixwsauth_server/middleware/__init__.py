@@ -209,6 +209,21 @@ class CheckSignatureMiddleware(object):
 
         return consumer
 
+    def verify_consumer(self, key, secret):
+        """
+        Given a key,secret pair, either returns the asociated consumer,
+        or return none.
+        """
+
+        consumer = self.consumer_store.get_consumer(key)
+        if not consumer:
+            return None
+
+        if not constant_time_compare(consumer.secret(), secret):
+            return None
+
+        return consumer
+
     def http_basic_consumer(self, request):
         """
         If the request has a valid HTTP Basic authentication, return the
@@ -221,14 +236,24 @@ class CheckSignatureMiddleware(object):
 
         (key, secret) = http_basic
 
-        consumer = self.consumer_store.get_consumer(key)
-        if not consumer:
+        return self.verify_consumer(key, secret)
+
+    def key_parameter_consumer(self, request):
+        """
+        If the request has a parameter named 'key', which consists of valid
+        consumer credentials, the associated consumer will be returned;
+        otherwise None.
+        """
+
+        try:
+            (key, secret) = request.GET.get('key').split(':')
+        except ValueError:
+            key = secret = None
+
+        if not key and not secret:
             return None
 
-        if not constant_time_compare(consumer.secret(), secret):
-            return None
-
-        return consumer
+        return self.verify_consumer(key, secret)
 
     def process_request(self, request):
         """
@@ -237,6 +262,7 @@ class CheckSignatureMiddleware(object):
         methods = (
             self.http_basic_consumer,
             self.oauth_consumer,
+            self.key_parameter_consumer,
         )
 
         for method in methods:
