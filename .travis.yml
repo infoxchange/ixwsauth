@@ -6,4 +6,5 @@ before_install:
 install:
     - pip install django django-tastypie IXDjango lettuce mock pep8 pylint pylint_mccabe
 script:
-    .githooks/pre-commit -f
+    - .githooks/pre-commit -f
+    - python -m unittest discover
