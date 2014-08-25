@@ -4,6 +4,6 @@ python:
 before_install:
     - npm install jshint
 install:
-    - pip install django IXDjango mock pep8 pylint pylint_mccabe
+    - pip install django django-tastypie IXDjango lettuce mock pep8 pylint pylint_mccabe
 script:
     .githooks/pre-commit -f
