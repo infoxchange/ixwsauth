@@ -244,7 +244,11 @@ class CheckSignatureMiddleware(object):
         of valid consumer credentials, the associated consumer will be returned;
         otherwise None.
         """
-        (key, secret)  = request.GET.get('key').split(':')
+
+        try:
+            (key, secret) = request.GET.get('key').split(':')
+        except ValueError:
+            key = secret = None
 
         if not key and secret:
             return None
