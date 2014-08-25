@@ -240,8 +240,8 @@ class CheckSignatureMiddleware(object):
 
     def key_parameter_consumer(self, request):
         """
-        If the request has a parameter named 'key', which consists
-        of valid consumer credentials, the associated consumer will be returned;
+        If the request has a parameter named 'key', which consists of valid
+        consumer credentials, the associated consumer will be returned;
         otherwise None.
         """
 

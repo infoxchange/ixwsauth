@@ -117,6 +117,7 @@ class BasicAuthClient(ApplicationClient):
 
         return 'Basic {0}'.format(base64string)
 
+
 class KeyParameterClient(ApplicationClient):
     """
     A Django test client which authenticates request using a 'key' parameter
@@ -185,6 +186,7 @@ def authenticate_with_secret_basic(step_, key, secret):
     """
 
     world.client = BasicAuthClient(key=key, secret=secret)
+
 
 @step(r'I authenticate to the API with key "([^"]*)" and secret "([^"]*)"$')
 @step(r'I authenticate to the API using a key parameter '
