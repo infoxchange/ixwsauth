@@ -1,6 +1,7 @@
 """
 Package configuration
 """
+# pylint:disable=no-name-in-module, import-error
 from distutils.core import setup
 from setuptools import find_packages
 
@@ -14,10 +15,14 @@ setup(
     license='MIT',
     description='Authentication libraries for IX web services',
     long_description=open('README').read(),
-    install_requires=[
-        "Django >= 1.3.0",
-        "pep8 >= 1.0.1",
-        "pylint >= 0.25.1",
-        "IXDjango >= 0.1.1"
-    ],
+    install_requires=(
+        'Django >= 1.4.0',
+        'IXDjango >= 0.1.1',
+    ),
+    tests_require=(
+        'mock',
+        'pep8',
+        'pylint',
+        'pylint-mccabe',
+    )
 )

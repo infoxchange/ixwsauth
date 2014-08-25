@@ -37,8 +37,7 @@ class WebServicesConsumer(object):
         """
         Make sure settings we need are available, set consumer key
         """
-        if (not settings.IXWS_CONSUMER_KEY
-           or not settings.IXWS_CONSUMER_SECRET):
+        if not settings.IXWS_CONSUMER_KEY or not settings.IXWS_CONSUMER_SECRET:
             raise ImproperlyConfigured("Settings file does not contain " +
                                        "authentication information.")
         self.key = settings.IXWS_CONSUMER_KEY
@@ -193,7 +192,7 @@ class AuthManager(object):
         clean_params = deepcopy(params)
         for auth_param in OAUTH_PARAMS:
             if auth_param in clean_params:
-                del(clean_params[auth_param])
+                del clean_params[auth_param]
         return clean_params
 
 
