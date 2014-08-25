@@ -250,7 +250,7 @@ class CheckSignatureMiddleware(object):
         except ValueError:
             key = secret = None
 
-        if not key and secret:
+        if not key and not secret:
             return None
 
         return self.verify_consumer(key, secret)
