@@ -119,9 +119,9 @@ class ConsumerStore(object):
             cache.set(cache_key, consumer)
             return consumer
 
-        except self.consumer_class.DoesNotExist as e:
+        except self.consumer_class.DoesNotExist as ex:
 
-            cache.set(cache_key, e)
+            cache.set(cache_key, ex)
             return None
 
 
@@ -234,7 +234,7 @@ class CheckSignatureMiddleware(object):
         if not http_basic:
             return None
 
-        (key, secret) = http_basic
+        (key, secret) = http_basic  # pylint:disable=unpacking-non-sequence
 
         return self.verify_consumer(key, secret)
 
