@@ -154,7 +154,6 @@ def authenticate_application(step_, key):
     world.client = OAuthClient(key=key)
 
 
-@step(r'I authenticate to the API with key "([^"]*)" and secret "([^"]*)"$')
 @step(r'I authenticate to the API using OAuth '
       r'with key "([^"]*)" and secret "([^"]*)"')
 def authenticate_with_secret(step_, key, secret):
