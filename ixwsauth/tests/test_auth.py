@@ -11,8 +11,8 @@ Tests for WSX Auth Components
 #
 from copy import deepcopy
 from mock import patch
+from unittest import TestCase
 
-from django.test import TestCase
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 
@@ -29,6 +29,10 @@ class WebServicesConsumerTests(TestCase):
         """
         self.cons_key = '99d27293b4bbd42d2937219aa5497ea51dee3bf9'
         self.cons_secret = '5b18ad13fe57d09b740b7985eddd1387da53e768'
+
+    @classmethod
+    def setUpClass(cls):
+        settings.configure()
 
     def test_consumer_key(self):
         """
