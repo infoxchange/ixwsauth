@@ -118,6 +118,23 @@ class BasicAuthClient(ApplicationClient):
         return 'Basic {0}'.format(base64string)
 
 
+class KeyParameterClient(ApplicationClient):
+    """
+    A Django test client which authenticates request using a 'key' parameter
+    and a consumer from the consumer store.
+    """
+
+    def authorisation(self, request):
+        """
+        Adds the key,secret pair to the request.
+        """
+
+        request.GET['key'] = '{key}:{secret}'.format(
+            key=self._key,
+            secret=self._secret,
+        )
+
+
 @before.each_scenario  # pylint:disable=no-member
 def set_default_client(scenario):
     """
@@ -170,3 +187,14 @@ def authenticate_with_secret_basic(step_, key, secret):
     """
 
     world.client = BasicAuthClient(key=key, secret=secret)
+
+
+@step(r'I authenticate to the API using a key parameter '
+      r'with key "([^"]*)" and secret "([^"]*)"')
+def authenticate_with_key_parameter(step_, key, secret):
+    """
+    Authenticate to the application with the given key and secret,
+    using a key parameter.
+    """
+
+    world.client = KeyParameterClient(key=key, secret=secret)
