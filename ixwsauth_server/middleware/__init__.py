@@ -247,7 +247,7 @@ class CheckSignatureMiddleware(object):
 
         try:
             (key, secret) = request.GET.get('key').split(':')
-        except ValueError:
+        except (AttributeError, ValueError):
             key = secret = None
 
         if not key and not secret:
