@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Tests for WSX Auth Components
 """
@@ -10,8 +11,8 @@ Tests for WSX Auth Components
 #
 from copy import deepcopy
 from mock import patch
+from unittest import TestCase
 
-from django.test import TestCase
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 
@@ -28,6 +29,10 @@ class WebServicesConsumerTests(TestCase):
         """
         self.cons_key = '99d27293b4bbd42d2937219aa5497ea51dee3bf9'
         self.cons_secret = '5b18ad13fe57d09b740b7985eddd1387da53e768'
+
+    @classmethod
+    def setUpClass(cls):
+        settings.configure()
 
     def test_consumer_key(self):
         """
@@ -287,3 +292,14 @@ class AuthManagerTests(TestCase):
         self.assertEqual(
             self.instance.oauth_n_params_str(self.test_params),
             'a=with%20whitespace&b=an&b=array&b=of&b=unsorted&b=values')
+
+        unicode_params = {
+            'a_♍': u'♈_♜',
+            u'ж_學': 'ἀ_னி',
+            u'ꩺ': [u'b', 'ꩥ', u'꤃'],
+        }
+        self.assertEqual(
+            self.instance.oauth_n_params_str(unicode_params),
+            'a_%E2%99%8D=%E2%99%88_%E2%99%9C&' +
+            '%D0%B6_%E5%AD%B8=%E1%BC%80_%E0%AE%A9%E0%AE%BF&' +
+            '%EA%A9%BA=b&%EA%A9%BA=%EA%A4%83&%EA%A9%BA=%EA%A9%A5')

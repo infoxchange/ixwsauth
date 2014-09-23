@@ -3,18 +3,27 @@ Tastypie API Authorization handlers
 """
 
 from tastypie.authentication import Authentication
+from tastypie.http import HttpUnauthorized
 
 
 class ApplicationAuthentication(Authentication):
     """
     Authenticate the API request by checking the application key.
     """
+
+    realm = 'tastypie'
+
     def is_authenticated(self, request, **kwargs):
         """
         Check that the request is signed by the application.
         """
         consumer = getattr(request, 'consumer', None)
-        return consumer is not None
+        if consumer is None:
+            response = HttpUnauthorized()
+            response['WWW-Authenticate'] = 'Basic Realm="%s"' % self.realm
+            return response
+        else:
+            return True
 
     def get_identifier(self, request):
         """
