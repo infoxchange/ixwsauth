@@ -9,7 +9,7 @@ import hmac
 import binascii
 from time import time
 from copy import deepcopy
-from urlparse import urlparse
+from urlparse import urlparse, parse_qs
 from urllib import quote
 
 from django.conf import settings
@@ -75,6 +75,12 @@ class AuthManager(object):
         """
         secret = consumer.secret()
         local_params = {}
+
+        # determine if there are additional params in the URL
+        query = parse_qs(urlparse(payload['url']).query)
+        payload['params'].update(query)
+        payload['url'] = self.oauth_n_url_str(payload['url'])
+
         if 'params' in payload and payload['params'] is not None:
             local_params.update(payload['params'])
         if 'headers' in payload and 'Authorization' in payload['headers']:
@@ -88,10 +94,12 @@ class AuthManager(object):
 
         raw_str_comps = (
             self.escape(payload['method'].upper()),
-            self.escape(self.oauth_n_url_str(payload['url'])),
+            self.escape(payload['url']),
             self.escape(self.oauth_n_params_str(local_params)),
         )
+
         raw = '&'.join(raw_str_comps)
+
         #
         # secret should be ascii anyway but django magic presents it as unicode
         # which hmac doesn't accept?!
