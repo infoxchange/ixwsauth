@@ -12,6 +12,7 @@ Tests for WSX Auth Components
 from copy import deepcopy
 from mock import patch
 from unittest import TestCase
+from urllib import urlencode
 
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
@@ -133,7 +134,7 @@ class AuthManagerTests(TestCase):
         self.test_params_with_oauth = deepcopy(self.test_params)
         self.test_params_with_oauth.update(self.test_oauth_params)
 
-        self.test_url = 'http://s2s.ozgur.dev?some=var'
+        self.test_url = 'http://s2s.ozgur.dev?' + urlencode(self.test_params)
 
         self.test_payload = {
             'params': self.test_params,
