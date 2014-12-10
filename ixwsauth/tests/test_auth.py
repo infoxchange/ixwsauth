@@ -159,8 +159,11 @@ class AuthManagerTests(TestCase):
         self.consumer_mock_instance = self.consumer_mock_class.return_value
         self.consumer_mock_instance.key = \
             '99d27293b4bbd42d2937219aa5497ea51dee3bf9'
+        # pylint:disable=no-member
         self.consumer_mock_instance.secret.return_value = \
             '5b18ad13fe57d09b740b7985eddd1387da53e768'
+        # pylint:enable=no-member
+
         #
         # mock time
         #
