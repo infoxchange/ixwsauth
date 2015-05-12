@@ -135,7 +135,7 @@ class KeyParameterClient(ApplicationClient):
         )
 
 
-@before.each_scenario  # pylint:disable=no-member
+@before.each_example  # pylint:disable=no-member
 def set_default_client(scenario):
     """
     Set a default client that does not have authentication
