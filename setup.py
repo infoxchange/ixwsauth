@@ -21,7 +21,7 @@ setup(
         'IXDjango >= 0.1.1',
     ),
     tests_require=(
-        'lettuce',
+        'aloe',
         'mock',
         'pep8',
         'pylint',

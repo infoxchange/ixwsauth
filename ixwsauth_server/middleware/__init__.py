@@ -13,9 +13,6 @@ from django.utils.importlib import import_module
 
 from functools import wraps
 
-from ixdjango.utils import flat_auth_header_val_to_data
-from ixwsauth.auth import AuthManager
-
 
 def import_by_path(dotted_path):
     """
@@ -31,7 +28,7 @@ def import_by_path(dotted_path):
 
 class Consumer(object):
     """
-    Consumer class to supply to AuthManager
+    Consumer class to supply to signature checking routines
     """
 
     def __init__(self, key=None, secret=None, obj=None):
@@ -127,26 +124,11 @@ class ConsumerStore(object):
 
 class CheckSignatureMiddleware(object):
     """
-    A middleware to check OAuth-like and HTTP Basic authentication.
+    A middleware to check HTTP Basic and key parameter authentication.
     """
 
     def __init__(self):
         self.consumer_store = ConsumerStore.get_consumer_store()
-
-    @staticmethod
-    def get_oauth_headers(request):
-        """
-        Get OAuth authorization headers from the request, if present.
-        """
-        if 'HTTP_AUTHORIZATION' in request.META:
-            (authorization_headers, auth_type) = flat_auth_header_val_to_data(
-                request.META['HTTP_AUTHORIZATION']
-            )
-
-            if auth_type == 'OAuth':
-                return authorization_headers
-
-        return None
 
     @staticmethod
     def get_basic_auth_headers(request):
@@ -165,49 +147,6 @@ class CheckSignatureMiddleware(object):
             return (user, password)
         except:  # pylint:disable=bare-except
             return None
-
-    def oauth_consumer(self, request):
-        """
-        If the request has a valid OAuth-like signature, return the associated
-        consumer; None otherwise.
-        """
-
-        auth = AuthManager()
-
-        authorization_headers = self.get_oauth_headers(request)
-        if authorization_headers is None:
-            return
-
-        url = auth.oauth_n_url_str(request.build_absolute_uri())
-
-        params = request.GET if request.method == 'GET' else {}
-
-        payload = {
-            'method': request.method,
-            'url': url,
-            'params': params,
-            'headers': {
-                'Authorization': authorization_headers
-            }
-        }
-
-        key = auth.consumer_key_from_payload(payload)
-        if not key:
-            return None
-
-        consumer = self.consumer_store.get_consumer(key)
-        if not consumer:
-            return None
-
-        signature = auth.oauth_signature_from_payload(payload)
-        if not signature:
-            return None
-
-        valid_sig = auth.generate_oauth_signature(consumer, payload)
-        if not constant_time_compare(signature, valid_sig):
-            return None
-
-        return consumer
 
     def verify_consumer(self, key, secret):
         """
@@ -257,11 +196,10 @@ class CheckSignatureMiddleware(object):
 
     def process_request(self, request):
         """
-        Check HTTP Basic and OAuth authentication.
+        Check HTTP Basic and key parameter authentication.
         """
         methods = (
             self.http_basic_consumer,
-            self.oauth_consumer,
             self.key_parameter_consumer,
         )
 

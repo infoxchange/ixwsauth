@@ -3,14 +3,11 @@ Steps for testing authentication
 """
 
 import base64
-from urlparse import parse_qs
 
 from django.test.client import Client
 
-from lettuce import before, step, world
+from aloe import before, step, world
 
-from ixdjango.utils import flatten_auth_header
-from ixwsauth import auth
 from ixwsauth_server.middleware import ConsumerStore
 
 
@@ -51,52 +48,6 @@ class ApplicationClient(Client):
         return environ
 
 
-class OAuthClient(ApplicationClient):
-    """
-    A Django test Client which does IXA WS authentication using
-    a consumer from the consumer store.
-    """
-
-    @property
-    def key(self):
-        """
-        The API key
-        """
-
-        return self._key
-
-    def secret(self):
-        """
-        The secret associated with the API key
-        """
-
-        return self._secret
-
-    def authorisation(self, request):
-        """
-        The OAuth signature to add to the request.
-        """
-
-        auth_man = auth.AuthManager()
-
-        method = request['REQUEST_METHOD']
-        if method == 'GET':
-            params = parse_qs(request['QUERY_STRING'])
-        else:
-            params = {}
-        payload = {
-            'method': method,
-            'url': 'http://testserver' + request['PATH_INFO'],
-            'params': params,
-        }
-        signed_payload = auth_man.oauth_signed_payload(self, payload)
-
-        return flatten_auth_header(
-            signed_payload['headers']['Authorization'],
-            'OAuth'
-        )
-
-
 class BasicAuthClient(ApplicationClient):
     """
     A Django test client which authenticates request using HTTP Basic auth
@@ -135,8 +86,8 @@ class KeyParameterClient(ApplicationClient):
         )
 
 
-@before.each_example  # pylint:disable=no-member
-def set_default_client(scenario):
+@before.each_example
+def set_default_client(scenario, outline, steps):
     """
     Set a default client that does not have authentication
     """
@@ -145,28 +96,6 @@ def set_default_client(scenario):
 
 
 @step(r'I authenticate to the API with key "([^\"]*)"$')
-@step(r'I authenticate to the API using OAuth with key "([^\"]*)"$')
-def authenticate_application(step_, key):
-    """
-    Authenticate as the application with given key and corresponding secret,
-    using OAuth-like signature.
-    """
-
-    world.client = OAuthClient(key=key)
-
-
-@step(r'I authenticate to the API with key "([^"]*)" and secret "([^"]*)"$')
-@step(r'I authenticate to the API using OAuth '
-      r'with key "([^"]*)" and secret "([^"]*)"')
-def authenticate_with_secret(step_, key, secret):
-    """
-    Authenticate to the application with the given key and secret,
-    using OAuth-like signature.
-    """
-
-    world.client = OAuthClient(key=key, secret=secret)
-
-
 @step(r'I authenticate to the API using HTTP Basic auth '
       r'with key "([^\"]*)"$')
 def authenticate_application_basic(step_, key):
@@ -178,6 +107,7 @@ def authenticate_application_basic(step_, key):
     world.client = BasicAuthClient(key=key)
 
 
+@step(r'I authenticate to the API with key "([^"]*)" and secret "([^"]*)"$')
 @step(r'I authenticate to the API using HTTP Basic auth '
       r'with key "([^\"]*)" and secret "([^\"]*)"')
 def authenticate_with_secret_basic(step_, key, secret):

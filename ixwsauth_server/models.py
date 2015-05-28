@@ -15,7 +15,7 @@ def random_key(length):
     """
 
     key = ''
-    for _ in xrange(length):
+    for _ in range(length):
         key += random.choice('ABCDEFGHIJKLMNOPQRSTUVWXYZ')
 
     return key
