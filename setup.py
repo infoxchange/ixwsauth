@@ -22,6 +22,7 @@ setup(
     tests_require=(
         'aloe',
         'django-tastypie',
+        'djangorestframework',
         'mock',
         'pep8',
         'pylint',

@@ -1,5 +1,5 @@
 """
-Tastypie API Authorization handlers
+Tastypie API authentication handlers.
 """
 
 from tastypie.authentication import Authentication
