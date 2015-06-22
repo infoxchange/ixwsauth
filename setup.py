@@ -17,11 +17,11 @@ setup(
     long_description=open('README').read(),
     install_requires=(
         'Django >= 1.4.0',
-        'django-tastypie',
         'IXDjango >= 0.1.1',
     ),
     tests_require=(
-        'lettuce',
+        'aloe',
+        'django-tastypie',
         'mock',
         'pep8',
         'pylint',

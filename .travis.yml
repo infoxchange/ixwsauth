@@ -1,10 +1,11 @@
 language: python
 python:
     - "2.7"
+    - "3.4"
 before_install:
     - npm install jshint
 install:
-    - pip install django django-tastypie IXDjango lettuce mock pep8 pylint pylint_mccabe
+    - pip install django django-tastypie IXDjango aloe mock pep8 pylint pylint_mccabe
 script:
     - .githooks/pre-commit -f
     - python -m unittest discover
