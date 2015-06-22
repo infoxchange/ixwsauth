@@ -18,10 +18,12 @@ setup(
     install_requires=(
         'Django >= 1.4.0',
         'IXDjango >= 0.1.1',
+        'future',
     ),
     tests_require=(
         'aloe',
         'django-tastypie',
+        'djangorestframework',
         'mock',
         'pep8',
         'pylint',
