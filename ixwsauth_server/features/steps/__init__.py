@@ -11,7 +11,10 @@ import base64
 
 from django.test.client import Client
 
-from aloe import before, step, world
+try:
+    from aloe import before, step, world
+except ImportError:
+    from lettuce import before, step, world
 
 from ixwsauth_server.middleware import ConsumerStore
 
@@ -88,7 +91,16 @@ class KeyParameterClient(ApplicationClient):
         )
 
 
-@before.each_example
+# each_example is not available in Lettuce master
+# pylint:disable=invalid-name,maybe-no-member
+try:
+    before_example = before.each_example
+except AttributeError:
+    before_example = before.each_scenario
+# pylint:enable=invalid-name,maybe-no-member
+
+
+@before_example
 def set_default_client(scenario, outline, steps):
     """
     Set a default client that does not have authentication
