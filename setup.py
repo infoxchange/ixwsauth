@@ -7,7 +7,7 @@ from setuptools import find_packages
 
 setup(
     name='IXWSAuth',
-    version='0.1.1',
+    version='0.2.0',
     author='Infoxchanhe Australia dev team',
     author_email='devs@infoxchange.net.au',
     packages=find_packages(),
@@ -17,7 +17,7 @@ setup(
     long_description=open('README').read(),
     install_requires=(
         'Django >= 1.4.0',
-        'IXDjango >= 0.1.1',
+        'IXDjango >= 0.2.1',
         'future',
     ),
     tests_require=(

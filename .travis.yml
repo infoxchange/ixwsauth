@@ -5,7 +5,18 @@ python:
 before_install:
     - npm install jshint
 install:
-    - pip install django django-tastypie djangorestframework IXDjango aloe mock pep8 pylint pylint_mccabe
+    - pip install django IXDjango future django-tastypie djangorestframework aloe mock pep8 pylint pylint_mccabe
 script:
     - .githooks/pre-commit -f
     - python -m unittest discover
+deploy:
+    provider: pypi
+    user: ixa
+    password:
+        secure: bVwzv9cKNy5rbCyofH6APOTjHayJYpIBk+2Zc0/5+D7pnH2VKLo/Rgd8LJR2pRZERA5XL1Ym3bv7v1y0bG1mxb5lHW2KLl40oWDFgT+7c/5qLZiQ+EWh8XkdNSw/inlxXefx2beUffXfZpiiIL17mDWYz4PKda7mMmPEKdmhlaM=
+    server: https://pypi.python.org/pypi
+    on:
+        tags: true
+        all_branches: true
+        python: 3.4
+        condition: "\"$TRAVIS_TAG\" = \"v$(python setup.py --version)\""
