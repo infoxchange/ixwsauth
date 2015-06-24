@@ -139,7 +139,7 @@ class CheckSignatureMiddleware(object):
         try:
             (auth_type, data) = request.META['HTTP_AUTHORIZATION'].split()
 
-            if auth_type.decode().lower() != 'basic':
+            if auth_type.lower() != 'basic':
                 return None
 
             bits = base64.b64decode(data).decode('utf-8')
