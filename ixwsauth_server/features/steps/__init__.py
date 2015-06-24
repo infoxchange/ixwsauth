@@ -67,10 +67,14 @@ class BasicAuthClient(ApplicationClient):
         """
 
         auth = '{key}:{secret}'.format(key=self._key, secret=self._secret)
-        base64string = base64.encodestring(auth.encode())\
-            .replace(bytes(b'\n'), bytes(b''))
 
-        return bytes(b'Basic ') + base64string
+        # The authentication string is base64-encoded (as bytes), then the
+        # result is decoded for inclusion in an HTTP header (which must be a
+        # string).
+        base64string = base64.encodestring(auth.encode()).decode()\
+            .replace('\n', '')
+
+        return 'Basic ' + base64string
 
 
 class KeyParameterClient(ApplicationClient):
