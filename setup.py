@@ -7,7 +7,7 @@ from setuptools import find_packages
 
 setup(
     name='IXWSAuth',
-    version='0.2.1',
+    version='0.2.2',
     author='Infoxchanhe Australia dev team',
     author_email='devs@infoxchange.net.au',
     packages=find_packages(),
