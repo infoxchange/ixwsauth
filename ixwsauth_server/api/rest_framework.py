@@ -4,7 +4,9 @@ Django REST Framework authentication handlers.
 
 from __future__ import (absolute_import, division,
                         print_function, unicode_literals)
+# pylint:disable=redefined-builtin,unused-wildcard-import
 from future.builtins import *
+# pylint:enable=redefined-builtin,unused-wildcard-import
 
 from rest_framework import (
     authentication,

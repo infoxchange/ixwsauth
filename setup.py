@@ -1,9 +1,10 @@
 """
 Package configuration
 """
+from setuptools import find_packages
+
 # pylint:disable=no-name-in-module, import-error
 from distutils.core import setup
-from setuptools import find_packages
 
 setup(
     name='IXWSAuth',

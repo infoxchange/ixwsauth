@@ -4,7 +4,9 @@ Tastypie API authentication handlers.
 
 from __future__ import (absolute_import, division,
                         print_function, unicode_literals)
+# pylint:disable=redefined-builtin,unused-wildcard-import
 from future.builtins import *
+# pylint:enable=redefined-builtin,unused-wildcard-import
 
 from tastypie.authentication import Authentication
 from tastypie.http import HttpUnauthorized

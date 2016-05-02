@@ -4,16 +4,18 @@ Steps for testing authentication
 
 from __future__ import (absolute_import, division,
                         print_function, unicode_literals)
+# pylint:disable=redefined-builtin,unused-wildcard-import
 from future.builtins import *
+# pylint:enable=redefined-builtin,unused-wildcard-import
 
-import base64
+import base64  # pylint:disable=wrong-import-order
 
 from django.test.client import Client
 
 try:
     from aloe import before, step, world
 except ImportError:
-    from lettuce import before, step, world
+    from lettuce import before, step, world  # pylint:disable=import-error
 
 from ixwsauth_server.middleware import ConsumerStore
 
@@ -71,6 +73,7 @@ class BasicAuthClient(ApplicationClient):
         # The authentication string is base64-encoded (as bytes), then the
         # result is decoded for inclusion in an HTTP header (which must be a
         # string).
+        # pylint:disable=deprecated-method
         base64string = base64.encodestring(auth.encode()).decode()\
             .replace('\n', '')
 
