@@ -3,15 +3,19 @@ Classes and functions to manage Web services authentication
 """
 
 import base64
+from functools import wraps
 
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.core.cache import cache
 from django.http import HttpResponseForbidden
 from django.utils.crypto import constant_time_compare
-from django.utils.importlib import import_module
 
-from functools import wraps
+# pylint:disable=import-error,wrong-import-order,no-name-in-module
+try:
+    from importlib import import_module
+except ImportError:
+    from django.utils.importlib import import_module
 
 
 def import_by_path(dotted_path):
