@@ -8,7 +8,7 @@ from distutils.core import setup
 
 setup(
     name='IXWSAuth',
-    version='0.2.2',
+    version='1.0.0',
     author='Infoxchange dev team',
     author_email='devs@infoxchange.org',
     packages=find_packages(),
