@@ -31,6 +31,9 @@ class ApplicationAuthentication(authentication.BaseAuthentication):
         # Make consumer look like a user for DRF
         consumer.is_authenticated = lambda: True
 
+        # Provide an id to the consumer. Used by built-in per user throttling.
+        consumer.id = consumer.key
+
         return (consumer, None)
 
     def authenticate_header(self, request):
