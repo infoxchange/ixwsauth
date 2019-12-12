@@ -10,6 +10,7 @@ from django.core.exceptions import ImproperlyConfigured
 from django.core.cache import cache
 from django.http import HttpResponseForbidden
 from django.utils.crypto import constant_time_compare
+from django.utils.deprecation import MiddlewareMixin
 
 # pylint:disable=import-error,wrong-import-order,no-name-in-module
 try:
@@ -30,7 +31,7 @@ def import_by_path(dotted_path):
     return getattr(module, class_name)
 
 
-class Consumer(object):
+class Consumer:
     """
     Consumer class to supply to signature checking routines
     """
@@ -55,7 +56,7 @@ class Consumer(object):
         return self._secret
 
 
-class ConsumerStore(object):
+class ConsumerStore:
     """
     A default, database-backed store for looking up consumers by their API
     key.
@@ -126,13 +127,14 @@ class ConsumerStore(object):
             return None
 
 
-class CheckSignatureMiddleware(object):
+class CheckSignatureMiddleware(MiddlewareMixin):
     """
     A middleware to check HTTP Basic and key parameter authentication.
     """
 
-    def __init__(self):
+    def __init__(self, get_response):
         self.consumer_store = ConsumerStore.get_consumer_store()
+        self.get_response = get_response
 
     @staticmethod
     def get_basic_auth_headers(request):
