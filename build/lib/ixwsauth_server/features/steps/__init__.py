@@ -73,7 +73,8 @@ class BasicAuthClient(ApplicationClient):
         # The authentication string is base64-encoded (as bytes), then the
         # result is decoded for inclusion in an HTTP header (which must be a
         # string).
-        base64string = base64.encodebytes(auth.encode()).decode()\
+        # pylint:disable=deprecated-method
+        base64string = base64.encodestring(auth.encode()).decode()\
             .replace('\n', '')
 
         return 'Basic ' + base64string
