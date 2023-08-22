@@ -1,3 +1,0 @@
-"""
-Lettuce tests
-"""
